@@ -8,7 +8,7 @@ from io import BytesIO
 st.set_page_config(layout="wide")
 st.title("Граф взаимопомощи студентов")
 
-url = "https://cloud.mail.ru/public/fzhG/jAtvSM34R/download"
+url="https://cloud.mail.ru/public/fzhG/jAtvSM34R/download"
 response = requests.get(url)
 
 G = nx.read_graphml(BytesIO(response.content))
