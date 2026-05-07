@@ -2,17 +2,12 @@
 import streamlit as st
 import networkx as nx
 import matplotlib.pyplot as plt
-import requests
-from io import BytesIO
 
 st.set_page_config(layout="wide")
 st.title("Граф взаимопомощи студентов")
 
-# Прямая ссылка на скачивание с Mail.ru
-url = ("https://cloclo21.datacloudmail.ru/weblink/get/"
-       "fzhG/jAtvSM34R")
-response = requests.get(url)
-G = nx.read_graphml(BytesIO(response.content))
+# Читаем файл прямо из репозитория
+G = nx.read_graphml("graph_dataset.graphml")
 
 fig, ax = plt.subplots(figsize=(12, 8))
 pos = nx.spring_layout(G, seed=42)
