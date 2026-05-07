@@ -1,21 +1,32 @@
+
 import streamlit as st
 import pandas as pd
+import networkx as nx
 import plotly.express as px
 
 st.set_page_config(page_title="GraphyPANTON", layout="wide")
-st.title("GraphyPANTON")
-st.write("Interactive graph visualization platform with PANTONE-styled export")
+st.title("GraphyPANTON - GraphML Edition")
 
-uploaded_file = st.file_uploader("Загрузи results.csv", type="csv")
+uploaded_file = st.file_uploader("Загрузи .graphml / .gexf / .txt", type=["graphml", "gexf", "txt"])
 
 if uploaded_file:
-    df = pd.read_csv(uploaded_file)
-    st.dataframe(df.head())
-    
-    x_axis = st.selectbox("Выбери X", df.columns)
-    y_axis = st.selectbox("Выбери Y", df.columns)
-    
-    fig = px.scatter(df, x=x_axis, y=y_axis)
-    st.plotly_chart(fig, use_container_width=True)
+    try:
+        G = nx.read_graphml(uploaded_file)
+        st.success(f"Граф загружен! Узлов: {G.number_of_nodes()}, Рёбер: {G.number_of_edges()}")
+        
+        # Достаём все атрибуты узлов в таблицу
+        df = pd.DataFrame.from_dict(dict(G.nodes(data=True)), orient='index')
+        st.dataframe(df.head())
+        
+        st.download_button("Скачать nodes.csv", df.to_csv(index=False), "nodes.csv")
+        
+        if len(df.columns) >= 2:
+            x_axis = st.selectbox("Выбери X", df.columns)
+            y_axis = st.selectbox("Выбери Y", df.columns)
+            fig = px.scatter(df, x=x_axis, y=y_axis, hover_name=df.index)
+            st.plotly_chart(fig, use_container_width=True)
+            
+    except Exception as e:
+        st.error(f"Не смог прочитать файл: {e}")
 else:
-    st.info("Загрузи CSV файл чтобы построить график")
+    st.info("Загрузи graphml файл чтобы увидеть узлы и график")
