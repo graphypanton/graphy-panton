@@ -8,9 +8,6 @@ from io import BytesIO
 st.set_page_config(layout="wide")
 st.title("Граф взаимопомощи студентов")
 
-import requests
-from io import BytesIO
-
 # Прямая ссылка на скачивание с Mail.ru
 url = "https://cloclo21.datacloudmail.ru/weblink/get/fzhG/jAtvSM34R"
 response = requests.get(url)
