@@ -9,7 +9,8 @@ st.set_page_config(layout="wide")
 st.title("Граф взаимопомощи студентов")
 
 # Прямая ссылка на скачивание с Mail.ru
-url = "https://cloclo21.datacloudmail.ru/weblink/get/fzhG/jAtvSM34R"
+url = ("https://cloclo21.datacloudmail.ru/weblink/get/"
+       "fzhG/jAtvSM34R")
 response = requests.get(url)
 G = nx.read_graphml(BytesIO(response.content))
 
